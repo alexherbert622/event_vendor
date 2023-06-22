@@ -6,15 +6,18 @@
 ####################
 # Library use #
 import time
-import os
-import sys
 import allure
+import pyautogui
 from allure_commons.types import AttachmentType
-from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
+from PageObject.Clear_information import Clear_information
+from PageObject.Delete_vendor import Delete_vendor
+from PageObject.Edit_vendor import Edit_vendor
 from PageObject.Popupwindow import Popupwindow
+from PageObject.Search_vendor import Search_vendor
 from PageObject.add_vendor import Add_vendor
 from PageObject.event_vendor_tab import Event_vendor_tab
 from PageObject.eventdiarypage import eventdiarypage
@@ -127,202 +130,354 @@ class TestEpo(Baseclass):
         add_vendor.Country_name().send_keys('india')
         time.sleep(3)
         add_vendor.State_name().send_keys('tamilnadu')
-        time.sleep(3)
+        time.sleep(4)
         add_vendor.Suburb_name().send_keys('trichy')
         time.sleep(3)
-        add_vendor.service_area_tab.click()
+        add_vendor.Service_area_tab().click()
         time.sleep(3)
-        self.driver.find_element_by_xpath('//p-scrollpanel[1]/div[1]/div[1]/div[1]/div[1]/div[3]/div[1]/div[1]/div[1]/div[1]/p-dropdown[1]/div[1]/div[3]').click()
+        add_vendor.Select_country().click()
         time.sleep(3)
-        self.driver.find_element_by_xpath('//input[@placeholder="Search Country"]').send_keys('IND')
+        add_vendor.Search_country().send_keys('IND')
         time.sleep(3)
-        list1 = self.driver.find_elements_by_xpath('//div[@class="ui-dropdown-items-wrapper"]//ul//p-dropdownitem')
+        list1 = add_vendor.Country_list()
         i = -1
         for names in list1:
             i = i + 1
             country = names.text
             if country == "INDIA":
-                self.driver.find_elements_by_xpath('//li[@class="ui-dropdown-item ui-corner-all"]//span')[i].click()
+                add_vendor.Element_list()[i].click()
                 time.sleep(7)
                 break
-        self.driver.find_element_by_xpath('//p-scrollpanel[1]/div[1]/div[1]/div[1]/div[1]/div[3]/div[1]/div[1]/div[2]/div[1]/p-dropdown[1]/div[1]/div[3]').click()
+        add_vendor.Select_state().click()
         time.sleep(3)
-        self.driver.find_element_by_xpath('//input[@placeholder="Search State"]').send_keys('TA')
+        add_vendor.Search_state().send_keys('TA')
         time.sleep(3)
-        list3 = self.driver.find_elements_by_xpath('//div[@class="ui-dropdown-items-wrapper"]//ul//p-dropdownitem')
+        list3 = add_vendor.State_list()
         k = -1
         for title3 in list3:
             k = k + 1
             state = title3.text
             if state == "TAMILNADU":
-                self.driver.find_elements_by_xpath('//li[@class="ui-dropdown-item ui-corner-all"]//span')[k].click()
+                add_vendor.State_element_list()[k].click()
                 time.sleep(7)
                 break
-        self.driver.find_element_by_xpath('//input[@placeholder="Enter Suburb"]').send_keys('trichy')
+        add_vendor.Suburb_name1().send_keys('trichy')
         time.sleep(3)
-        self.driver.find_element_by_xpath('//a[contains(text(), "Social Link")]').click()
+        add_vendor.Social_link_tab().click()
         time.sleep(3)
-        self.driver.find_element_by_xpath('//p-scrollpanel[1]/div[1]/div[1]/div[1]/div[1]/div[4]/div[1]/form[1]/div[1]/div[1]/div[1]/p-dropdown[1]/div[1]/div[3]').click()
+        add_vendor.Select_social_media().click()
         time.sleep(3)
-        self.driver.find_element_by_xpath('//div[@class="ui-dropdown-items-wrapper"]//ul//p-dropdownitem[3]//li//span').click()
+        add_vendor.Select_social_type().click()
         time.sleep(3)
-        self.driver.find_element_by_id('txtMediaType').send_keys('www.twitter.com')
+        add_vendor.Link_text_box().send_keys('www.twitter.com')
         time.sleep(3)
-        self.driver.find_element_by_xpath('//a[contains(text(), "Bank Details")]').click()
+        add_vendor.Add_link_button().click()
         time.sleep(3)
-        self.driver.find_element_by_id('txtAccountNo').send_keys('192329832')
+        add_vendor.Bank_details_tab().click()
         time.sleep(3)
-        self.driver.find_element_by_id('txtAccountName').send_keys('kelly')
+        add_vendor.Account_no().send_keys('192329832')
         time.sleep(3)
-        self.driver.find_element_by_id('txtAccType').send_keys('savings')
+        add_vendor.Account_name().send_keys('kelly')
         time.sleep(3)
-        self.driver.find_element_by_id('txtBankName').send_keys('icici')
+        add_vendor.Account_type().send_keys('savings')
         time.sleep(3)
-        self.driver.find_element_by_id('txtBranchName').send_keys('beachroad')
+        add_vendor.Bank_name().send_keys('icici')
         time.sleep(3)
-        self.driver.find_element_by_xpath('//a[contains(text(), "Other")]').click()
+        add_vendor.Branch_name().send_keys('beachroad')
         time.sleep(3)
-        self.driver.find_element_by_id('txtAlternateMobileNo').send_keys('9876543213')
+        add_vendor.Others_tab().click()
         time.sleep(3)
-        self.driver.find_element_by_id('txtAlternateMailID').send_keys('kellybob@gmail.com')
+        add_vendor.Alternate_mobile_no().send_keys('9876543213')
         time.sleep(3)
-        self.driver.find_element_by_xpath('//button[@data-tour="savevendorVMdetails"]').click()
+        add_vendor.Alternate_email_id().send_keys('kellybob@gmail.com')
+        time.sleep(3)
+        #add_vendor.Save_detail_button().click()
+        add_vendor.Close_button().click()
         time.sleep(3)
 
     @allure.description('To edit the details of vendor')
     def test_TC_11_edit_vendor(self):
+        editvendor = Edit_vendor(self.driver)
         time.sleep(3)
-        self.driver.find_element_by_xpath('//div[3]//table[1]//tbody[1]//tr[1]//td[8]//div[1]//a[1]').click()
+        editvendor.Detail_button().click()
+        time.sleep(4)
+        editvendor.Edit_button().click()
         time.sleep(3)
-        self.driver.find_element_by_id('txtBusinessName').send_keys('miltonx')
+        editvendor.Business_name().clear()
+        editvendor.Business_name().send_keys('miltonx')
         time.sleep(3)
-        self.driver.find_element_by_id('txtMailID').send_keys('robalberts@gmail.com')
+        #editvendor.Mail_id().send_keys('robalberts@gmail.com')
+        #time.sleep(3)
+        editvendor.Mobile_no().clear()
+        editvendor.Mobile_no().send_keys('9343934333')
         time.sleep(3)
-        self.driver.find_element_by_id('txtMobileNo').send_keys('9343934333')
+        editvendor.Website().clear()
+        editvendor.Website().send_keys('www.gmail.com')
         time.sleep(3)
-        self.driver.find_element_by_id('txtWebsite').send_keys('www.gmail.com')
+        editvendor.Assign_item().click()
         time.sleep(3)
-        self.driver.find_element_by_xpath('//angular2-multiselect[1]/div[1]/div[1]/div[1]').click()
+        editvendor.Assign_item_checkbox_click().click()
         time.sleep(3)
-        self.driver.find_element_by_xpath('//angular2-multiselect[1]/div[1]/div[2]/div[3]/div[3]/ul[1]/span[2]/li[1]/label[1]').click()
+        editvendor.Assign_tags().send_keys('contracts')
         time.sleep(3)
-        self.driver.find_element_by_xpath('//p-scrollpanel[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[12]/div[1]/mat-chip-list[1]/div[1]/input[1]').send_keys('contracts')
+        editvendor.Address_tab().click()
         time.sleep(3)
-        self.driver.find_element_by_xpath('//a[contains(text(), "Address")]').click()
+        editvendor.Search_address().clear()
+        editvendor.Search_address().send_keys('maid')
         time.sleep(3)
-        self.driver.find_element_by_id('txtAddress').send_keys('maid')
+        editvendor.Country_name().clear()
+        editvendor.Country_name().send_keys('us')
         time.sleep(3)
-        self.driver.find_element_by_id('txtCountry').send_keys('us')
+        editvendor.State_name().clear()
+        editvendor.State_name().send_keys('ok')
         time.sleep(3)
-        self.driver.find_element_by_id('txtState').send_keys('ok')
+        editvendor.Suburb_name().clear()
+        editvendor.Suburb_name().send_keys('tulsa')
         time.sleep(3)
-        self.driver.find_element_by_id('txtSuburb').send_keys('tulsa')
+        editvendor.Service_area_tab().click()
         time.sleep(3)
-        self.driver.find_element_by_xpath('//a[contains(text(), "Service Area")]').click()
+        editvendor.Select_country().click()
         time.sleep(3)
-        self.driver.find_element_by_xpath('//p-scrollpanel[1]/div[1]/div[1]/div[1]/div[1]/div[3]/div[1]/div[1]/div[1]/div[1]/p-dropdown[1]/div[1]/div[3]').click()
+        editvendor.Search_country().send_keys('IND')
         time.sleep(3)
-        self.driver.find_element_by_xpath('//input[@placeholder="Search Country"]').send_keys('IND')
-        time.sleep(3)
-        lit1 = self.driver.find_elements_by_xpath('//div[@class="ui-dropdown-items-wrapper"]//ul//p-dropdownitem')
+        lit1 = editvendor.Country_list()
         m = -1
         for names1 in lit1:
             m = m + 1
             country2 = names1.text
             if country2 == "INDIA":
-                self.driver.find_elements_by_xpath('//li[@class="ui-dropdown-item ui-corner-all"]//span')[m].click()
+                editvendor.Country_select()[m].click()
                 time.sleep(7)
                 break
-        self.driver.find_element_by_xpath('//p-scrollpanel[1]/div[1]/div[1]/div[1]/div[1]/div[3]/div[1]/div[1]/div[2]/div[1]/p-dropdown[1]/div[1]/div[3]').click()
+        editvendor.Select_state().click()
         time.sleep(3)
-        self.driver.find_element_by_xpath('//input[@placeholder="Search State"]').send_keys('TA')
+        editvendor.Search_state().send_keys('TA')
         time.sleep(3)
-        list6 = self.driver.find_elements_by_xpath('//div[@class="ui-dropdown-items-wrapper"]//ul//p-dropdownitem')
+        list6 = editvendor.State_list()
         n = -1
         for title4 in list6:
             n = n + 1
             state1 = title4.text
             if state1 == "TAMILNADU":
-                self.driver.find_elements_by_xpath('//li[@class="ui-dropdown-item ui-corner-all"]//span')[n].click()
+                editvendor.State_select()[n].click()
                 time.sleep(7)
                 break
-        self.driver.find_element_by_xpath('//input[@placeholder="Enter Suburb"]').send_keys('trichy')
         time.sleep(3)
-        self.driver.find_element_by_xpath('//a[contains(text(), "Social Link")]').click()
+        editvendor.Enter_suburb().send_keys('trichy')
         time.sleep(3)
-        self.driver.find_element_by_xpath('//p-scrollpanel[1]/div[1]/div[1]/div[1]/div[1]/div[4]/div[1]/form[1]/div[1]/div[1]/div[1]/p-dropdown[1]/div[1]/div[3]').click()
+        editvendor.Social_link_tab().click()
         time.sleep(3)
-        self.driver.find_element_by_xpath('//div[@class="ui-dropdown-items-wrapper"]//ul//p-dropdownitem[3]//li//span').click()
+        editvendor.Select_social_media_type().click()
         time.sleep(3)
-        self.driver.find_element_by_id('txtMediaType').send_keys('www.twitter.com')
+        editvendor.Select_social_type().click()
         time.sleep(3)
-        self.driver.find_element_by_xpath('//a[contains(text(), "Bank Details")]').click()
+        editvendor.Enter_social_media().send_keys('www.twitter.com')
         time.sleep(3)
-        self.driver.find_element_by_id('txtAccountNo').send_keys('192339832')
+        editvendor.Add_social_media_button().click()
         time.sleep(3)
-        self.driver.find_element_by_id('txtAccountName').send_keys('kely')
+        editvendor.Bank_details_tab().click()
         time.sleep(3)
-        self.driver.find_element_by_id('txtAccType').send_keys('saving')
+        editvendor.Account_no().send_keys('192339832')
         time.sleep(3)
-        self.driver.find_element_by_id('txtBankName').send_keys('icic')
+        editvendor.Account_name().send_keys('kely')
         time.sleep(3)
-        self.driver.find_element_by_id('txtBranchName').send_keys('beachroad')
+        editvendor.Account_type().send_keys('saving')
         time.sleep(3)
-        self.driver.find_element_by_xpath('//a[contains(text(), "Other")]').click()
+        editvendor.Bank_name().send_keys('icic')
         time.sleep(3)
-        self.driver.find_element_by_id('txtAlternateMobileNo').send_keys('9876553213')
+        editvendor.Branch_name().send_keys('beachroad')
         time.sleep(3)
-        self.driver.find_element_by_id('txtAlternateMailID').send_keys('kelybob@gmail.com')
+        editvendor.Other_tab().click()
         time.sleep(3)
-        self.driver.find_element_by_xpath('//app-event-vendor-management[1]/app-addvendormodal[1]/div[2]/div[1]/div[1]/div[1]/div[1]').click()
+        editvendor.Alternate_mobile_no().send_keys('9876553213')
         time.sleep(3)
+        editvendor.Alternate_email_id().send_keys('kelybob@gmail.com')
+        time.sleep(3)
+        editvendor.Update_button().click()
+        time.sleep(7)
+        editvendor.Vendor_profile_image().click()
+        time.sleep(3)
+        editvendor.Click_to_upload().click()
+        time.sleep(15)
+        pyautogui.write(r"E:\Automation\profile_pic.jpg")  # path of File
+        time.sleep(15)
+        pyautogui.press('enter')
+        time.sleep(15)
+        editvendor.Message_tab().click()
+        time.sleep(3)
+        editvendor.Send_message_button().click()
+        time.sleep(3)
+        editvendor.Toclick().click()
+        time.sleep(3)
+        editvendor.Mailidselect().click()
+        time.sleep(3)
+        editvendor.Toclose().click()
+        time.sleep(3)
+        editvendor.Subject().send_keys('testing')
+        time.sleep(3)
+        editvendor.Entityclick().click()
+        time.sleep(3)
+        editvendor.Entityselect().click()
+        time.sleep(3)
+        ele = editvendor.Switch_to_frame()
+        self.driver.switch_to.frame(ele)
+        time.sleep(3)
+        editvendor.Body_text().send_keys('test')
+        time.sleep(3)
+        self.driver.switch_to.default_content()
+        time.sleep(8)
+        allure.attach(self.driver.get_screenshot_as_png(), name="compose_mail_screenshot",
+                      attachment_type=AttachmentType.PNG)
+        time.sleep(3)
+        editvendor.Send_key1().click()
+        time.sleep(3)
+        editvendor.Files_tab().click()
+        time.sleep(3)
+        editvendor.Attach_file_button().click()
+        time.sleep(3)
+        editvendor.Attach_from_computer().click()
+        time.sleep(3)
+        editvendor.Click_to_file_upload().click()
+        time.sleep(3)
+        pyautogui.write(r"E:\Automation\Contact.xls")  # path of File
+        time.sleep(15)
+        pyautogui.press('enter')
+        time.sleep(20)
+        editvendor.Notes_tab().click()
+        time.sleep(3)
+        editvendor.Add_notes().click()
+        time.sleep(3)
+        editvendor.Add_notes_text_box().send_keys("test")
+        time.sleep(3)
+        editvendor.Back_button().click()
+        time.sleep(3)
+
 
     @allure.description('search the vendor in search text box and it will only show the vendor name related to text')
     def test_TC_12_search_vendor(self):
+        searchvendor = Search_vendor(self.driver)
         time.sleep(3)
-        self.driver.find_element_by_xpath('//input[@placeholder="Search Vendor"]').send_keys('ryan')
+        searchvendor.Search_vendor_textbox().send_keys('ryan')
         time.sleep(3)
         allure.attach(self.driver.get_screenshot_as_png(), name="search_vendor",
                       attachment_type=AttachmentType.PNG)
         time.sleep(3)
-        self.driver.find_element_by_xpath('//a[@data-tour="searchvendoractionVM"]').click()
+        searchvendor.Search_vendor_tab().click()
         time.sleep(3)
-        search_names = self.driver.find_elements_by_xpath('//div[@class="tab-pane fade show active"]//div[1]//div[1]//div[3]//table[1]//tbody[1]//tr//td[2]')
+        search_names = searchvendor.Vendor_name_list()
         w = -1
         for o in search_names:
             w = w + 1
             names2 = o.text
-            if names2 == "kelli2   tatey2":
-                self.driver.find_elements_by_xpath('//td[@data-title="Action"]//div[1]//button')[o].click()
+            if names2 == "kelli4 tatey4":
+                searchvendor.Vendor_name()[w].click()
                 time.sleep(3)
                 break
-        self.driver.find_element_by_xpath('//a[contains(text(), "Event Vendor")]').click()
+        searchvendor.Event_vendor_tab().click()
+        time.sleep(5)
+
+    @allure.description('To delete the specific vendor')
+    def test_TC_13_delete_vendor(self):
+        deletevendor = Delete_vendor(self.driver)
+        time.sleep(7)
+        #vendor_names = deletevendor.Vendor_name()
+        #f = -1
+        #for s in vendor_names:
+        #    f = f + 1
+        #    names3 = s.text
+        #    if names3 == "kelli4 tatey4":
+        #        deletevendor.Vendor_delete()[f].click()
+        #        time.sleep(3)
+        #        break
+        #deletevendor.Confim_delete().click()
+        #time.sleep(3)
+        #delete_vendor = deletevendor.Vendor_name1()
+        #x = -1
+        #for j in delete_vendor:
+        #    x = x + 1
+        #    names4 = j.text
+        #    if names4 == "kelli4 tatey4":
+        #        deletevendor.Vendor_delete1()[x].click()
+        #        time.sleep(3)
+        #        break
+        #time.sleep(3)
+        #deletevendor.Confim_delete().click()
+        #time.sleep(3)
+        deletevendor.Vendor_delete4().click()
+        time.sleep(3)
+        deletevendor.Confim_delete().click()
         time.sleep(3)
 
-    @allure.description('To delete the specific vendorww')
-    def test_TC_13_delete_vendor(self):
+    def test_TC_14_clear_information(self):
+        clearinformation = Clear_information(self.driver)
         time.sleep(3)
-        vendor_names = self.driver.find_elements_by_xpath('//div[3]//table[1]//tbody[1]//tr//td[2]')
-        f = -1
-        for s in vendor_names:
-            f = f + 1
-            names3 = s.text
-            if names3 == "kelli4   tatey4":
-                self.driver.find_elements_by_xpath('//td[@data-title="Action"]//div[1]//a[2]')[f].click()
-                time.sleep(3)
-                break
-        self.driver.find_element_by_xpath('//button[contains(text(), "Yes, Remove it!")]').click()
+        clearinformation.Detail_button().click()
+        time.sleep(4)
+        clearinformation.Edit_button().click()
         time.sleep(3)
-        delete_vendor = self.driver.find_elements_by_xpath('//div[3]//table[1]//tbody[1]//tr//td[2]')
-        x = -1
-        for j in delete_vendor:
-            x = x + 1
-            names4 = j.text
-            if names4 == "kelli3   tatey3":
-                self.driver.find_elements_by_xpath('//td[@data-title="Action"]//div[1]//a[2]')[x].click()
-                time.sleep(3)
-                break
-        self.driver.find_element_by_xpath('//button[contains(text(), "Yes, Remove it!")]').click()
+        clearinformation.Business_name().clear()
+        time.sleep(3)
+        # editvendor.Mail_id().send_keys('robalberts@gmail.com')
+        # time.sleep(3)
+        clearinformation.Mobile_no().clear()
+        time.sleep(3)
+        clearinformation.Website().clear()
+        time.sleep(3)
+        clearinformation.Assign_item().click()
+        time.sleep(3)
+        clearinformation.Address_tab().click()
+        time.sleep(3)
+        clearinformation.Search_address().clear()
+        time.sleep(3)
+        clearinformation.Country_name().clear()
+        time.sleep(3)
+        clearinformation.State_name().clear()
+        time.sleep(3)
+        clearinformation.Suburb_name().clear()
+        time.sleep(3)
+        clearinformation.Service_area_tab().click()
+        time.sleep(3)
+        clearinformation.Clear_suburb().click()
+        time.sleep(3)
+        clearinformation.Social_link_tab().click()
+        time.sleep(3)
+        clearinformation.Clear_social_link().click()
+        time.sleep(3)
+        clearinformation.Bank_details_tab().click()
+        time.sleep(3)
+        clearinformation.Account_no().clear()
+        time.sleep(3)
+        clearinformation.Account_name().clear()
+        time.sleep(3)
+        clearinformation.Account_type().clear()
+        time.sleep(3)
+        clearinformation.Bank_name().clear()
+        time.sleep(3)
+        clearinformation.Branch_name().clear()
+        time.sleep(3)
+        clearinformation.Other_tab().click()
+        time.sleep(3)
+        clearinformation.Alternate_mobile_no().clear()
+        time.sleep(3)
+        clearinformation.Alternate_email_id().clear()
+        time.sleep(3)
+        clearinformation.Update_button().click()
+        time.sleep(7)
+        clearinformation.Clear_profile_image().click()
+        time.sleep(3)
+        clearinformation.Files_tab().click()
+        time.sleep(3)
+        clearinformation.File_delete().click()
+        time.sleep(3)
+        clearinformation.Confirm_delete().click()
+        time.sleep(3)
+        clearinformation.Notes_tab().click()
+        time.sleep(3)
+        clearinformation.Delete_note().click()
+        time.sleep(3)
+        clearinformation.Confirm_delete().click()
+        time.sleep(3)
+        clearinformation.Back_button().click()
         time.sleep(3)
 
         
